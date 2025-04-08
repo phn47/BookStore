@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="web/layout :: head"></head>
+
+<body>
+    <div th:replace="web/layout :: header"></div>
+
+    <section class="inner-section single-banner"
+        style="background: url(images/single-banner.jpg) no-repeat center; height: 200px; padding: 20px 0; display: flex; align-items: center;">
+        <div class="container">
+            <h2>Thông tin đơn hàng</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="inner-section checkout-part">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="account-card">
+                        <div class="account-title">
+                            <h4>Đơn Đặt Hàng Của Bạn</h4>
+                        </div>
+                        <div class="text-center">
+                            <h3 style="color: #dc3545" class="mt-5">THANH TOÁN THẤT BẠI!</h3>
+                            <br>
+                            <h4>Rất tiếc, thanh toán của bạn không thành công!</h4>
+                            <h5><em>Vui lòng thử lại hoặc chọn phương thức thanh toán khác.</em></h5>
+                            <hr>
+                            <a th:href="@{/shoppingCart_checkout}" style="text-decoration: underline; color: #dc3545">
+                                <em>Quay lại trang thanh toán</em>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div th:replace="web/layout :: footer"></div>
+    <div th:replace="web/layout :: script"></div>
+</body>
+
+</html>
