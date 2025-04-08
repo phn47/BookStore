@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta charset="UTF-8" />
+	<title>KnowSphere - Trang quản trị</title>
+	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
+
+	<!-- Fonts and icons -->
+	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+	<script>
+		WebFont.load({
+			google: { "families": ["Lato:300,400,700,900"] },
+			custom: { "families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css'] },
+			active: function () {
+				sessionStorage.fonts = true;
+			}
+		});
+	</script>
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/css/atlantis.min.css">
+	<!-- CSS Just for demo purpose, don't include it in your project -->
+	<link rel="stylesheet" href="/assets/css/demo.css">
+
+	<style>
+		/* Cải thiện giao diện chung */
+		body {
+			background-color: #f8f9fa;
+		}
+
+		.card {
+			border: none;
+			border-radius: 10px;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+			margin-bottom: 30px;
+		}
+
+		.card-header {
+			background-color: #fff;
+			border-bottom: 1px solid #f1f1f1;
+			padding: 20px 25px;
+			border-radius: 10px 10px 0 0;
+		}
+
+		.card-title {
+			font-size: 18px;
+			font-weight: 600;
+			color: #444;
+			margin-bottom: 0;
+		}
+
+		.card-body {
+			padding: 0;
+		}
+
+		/* Cải thiện bảng */
+		.table-responsive {
+			padding: 0;
+		}
+
+		.table {
+			margin-bottom: 0;
+		}
+
+		.table thead th {
+			background-color: #f9fafb;
+			color: #6c757d;
+			font-weight: 600;
+			font-size: 13px;
+			padding: 15px 20px;
+			border-top: none;
+			border-bottom: 1px solid #edf2f9;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		.table tbody tr {
+			border-bottom: 1px solid #edf2f9;
+			transition: all 0.2s;
+		}
+
+		.table tbody tr:hover {
+			background-color: #f8f9fa;
+		}
+
+		.table tbody td {
+			padding: 15px 20px;
+			vertical-align: middle;
+			color: #495057;
+			font-size: 14px;
+			border-top: none;
+		}
+
+		/* Avatar cải tiến */
+		.avatar-container {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			overflow: hidden;
+			background-color: #f1f3f4;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto;
+			border: 3px solid #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.avatar-img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		/* Trạng thái */
+		.status-active,
+		.status-inactive {
+			padding: 6px 12px;
+			border-radius: 30px;
+			font-size: 12px;
+			font-weight: 600;
+			display: inline-block;
+			text-align: center;
+		}
+
+		.status-active {
+			background-color: rgba(40, 167, 69, 0.1);
+			color: #28a745;
+		}
+
+		.status-inactive {
+			background-color: rgba(220, 53, 69, 0.1);
+			color: #dc3545;
+		}
+
+		/* Nút hành động */
+		.action-buttons {
+			display: flex;
+			gap: 8px;
+			justify-content: center;
+		}
+
+		.action-buttons .btn {
+			width: 36px;
+			height: 36px;
+			padding: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 8px;
+			transition: all 0.2s;
+			border: none;
+		}
+
+		.action-buttons .btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.action-buttons .btn-info {
+			background-color: #17a2b8;
+		}
+
+		.action-buttons .btn-warning {
+			background-color: #ffc107;
+		}
+
+		.action-buttons .btn-danger {
+			background-color: #dc3545;
+		}
+
+		.action-buttons .btn-success {
+			background-color: #28a745;
+		}
+
+		/* Tìm kiếm */
+		.search-container {
+			position: relative;
+			width: 300px;
+		}
+
+		#userSearch {
+			border-radius: 30px;
+			padding: 10px 20px;
+			border: 1px solid #e9ecef;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+			transition: all 0.3s;
+		}
+
+		#userSearch:focus {
+			border-color: #80bdff;
+			box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+		}
+
+		/* Phân trang */
+		.dataTables_wrapper .dataTables_paginate {
+			padding: 20px;
+			display: flex;
+			justify-content: center;
+		}
+
+		.dataTables_wrapper .dataTables_paginate .paginate_button {
+			margin: 0 3px;
+			border: none !important;
+			background: none !important;
+		}
+
+		.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+			background-color: #1572e8 !important;
+			color: white !important;
+			border-radius: 5px;
+		}
+
+		.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+			background-color: #f8f9fa !important;
+			color: #1572e8 !important;
+		}
+
+		/* Hiển thị số lượng */
+		.dataTables_wrapper .dataTables_length {
+			padding: 20px 20px 0 20px;
+		}
+
+		.dataTables_wrapper .dataTables_length select {
+			border-radius: 5px;
+			padding: 5px 10px;
+			border: 1px solid #e9ecef;
+		}
+
+		/* Thông tin phân trang */
+		.dataTables_wrapper .dataTables_info {
+			padding: 20px;
+			color: #6c757d;
+		}
+
+		/* Ẩn tìm kiếm mặc định của DataTables */
+		.dataTables_wrapper .dataTables_filter {
+			display: none;
+		}
+
+		/* Header trang */
+		.page-header {
+			margin-bottom: 30px;
+		}
+
+		.page-title {
+			font-size: 24px;
+			font-weight: 600;
+			color: #444;
+		}
+
+		.breadcrumbs {
+			margin-top: 5px;
+		}
+
+		/* Responsive */
+		@media (max-width: 768px) {
+			.search-container {
+				width: 100%;
+				margin-top: 15px;
+			}
+
+			.d-flex.justify-content-between {
+				flex-direction: column;
+				align-items: flex-start !important;
+			}
+
+			.action-buttons {
+				flex-wrap: wrap;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="wrapper">
+		<!-- Header -->
+
+		<th:block th:replace="~{admin/fragments/header :: header}"></th:block>
+
+		<!-- End Header -->
+
+		<!-- Navbar -->
+
+		<th:block th:replace="~{admin/fragments/navbar :: navbar}"></th:block>
+
+		<!-- End Navbar -->
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Quản lý người dùng</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a th:href="@{/admin/home}">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a th:href="@{/admin/home}">Trang chủ</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="javascript:void(0);">Quản lý người dùng</a>
+							</li>
+						</ul>
+					</div>
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="d-flex justify-content-between align-items-center">
+									<h4 class="card-title">DANH SÁCH NGƯỜI DÙNG</h4>
+									<div class="search-container">
+										<input type="text" id="userSearch" class="form-control"
+											placeholder="Tìm kiếm người dùng...">
+									</div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table id="user-table" class="display table table-hover">
+										<thead>
+											<tr>
+												<th>Mã KH</th>
+												<th>Ảnh đại diện</th>
+												<th>Họ và tên</th>
+												<th>Email</th>
+												<th>Ngày đăng ký</th>
+												<th>Trạng thái</th>
+												<th>Hành động</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item : ${users}">
+												<td>[[${item.userId}]]</td>
+												<td>
+													<div class="avatar-container">
+														<img th:src="@{'/loadImage?imageName='+${item.avatar}}"
+															alt="Avatar" class="avatar-img">
+													</div>
+												</td>
+												<td>[[${item.name}]]</td>
+												<td>[[${item.email}]]</td>
+												<td>[[${item.registerDate}]]</td>
+												<td>
+													<span
+														th:class="${item.status ? 'status-active' : 'status-inactive'}">
+														[[${item.status ? 'Đang hoạt động' : 'Ngừng hoạt động'}]]
+													</span>
+												</td>
+												<td>
+													<div class="action-buttons">
+														<button type="button" class="btn btn-info" data-toggle="tooltip"
+															title="Xem chi tiết">
+															<i class="fa fa-eye"></i>
+														</button>
+														<button type="button" class="btn btn-warning"
+															data-toggle="tooltip" title="Chỉnh sửa">
+															<i class="fa fa-edit"></i>
+														</button>
+														<button th:if="${item.status}" type="button"
+															class="btn btn-danger" data-toggle="tooltip"
+															title="Vô hiệu hóa">
+															<i class="fa fa-ban"></i>
+														</button>
+														<button th:if="${!item.status}" type="button"
+															class="btn btn-success" data-toggle="tooltip"
+															title="Kích hoạt">
+															<i class="fa fa-check-circle"></i>
+														</button>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<footer class="footer">
+				<div class="container-fluid">
+					<nav class="pull-left">
+						<ul class="nav">
+							<li class="nav-item">
+								<a class="nav-link" href="javascript:void(0);">
+									KnowSphere
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="javascript:void(0);">
+									Giúp đỡ
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="javascript:void(0);">
+									Liên hệ
+								</a>
+							</li>
+						</ul>
+					</nav>
+					<div class="copyright ml-auto">
+						2025, made with <i class="fa fa-heart heart text-danger"></i> by <a
+							href="javascript:void(0);">KnowSphere</a>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+	</div>
+	<!--   Core JS Files   -->
+	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
+	<script src="/assets/js/core/popper.min.js"></script>
+	<script src="/assets/js/core/bootstrap.min.js"></script>
+	<!-- jQuery UI -->
+	<script src="/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+	<script src="/assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+
+	<!-- jQuery Scrollbar -->
+	<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+	<!-- Datatables -->
+	<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+	<!-- Atlantis JS -->
+	<script src="/assets/js/atlantis.min.js"></script>
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+	<script src="/assets/js/setting-demo2.js"></script>
+	<script>
+		$(document).ready(function () {
+			// Khởi tạo DataTable với phân trang 4 người dùng mỗi trang
+			$('#user-table').DataTable({
+				"pageLength": 4,
+				"lengthMenu": [4, 8, 12, 20],
+				"language": {
+					"lengthMenu": "Hiển thị _MENU_ người dùng",
+					"zeroRecords": "Không tìm thấy kết quả",
+					"info": "Hiển thị _START_ đến _END_ của _TOTAL_ người dùng",
+					"infoEmpty": "Không có dữ liệu",
+					"infoFiltered": "(lọc từ _MAX_ tổng số người dùng)",
+					"search": "Tìm kiếm:",
+					"paginate": {
+						"first": "Đầu",
+						"last": "Cuối",
+						"next": "Sau",
+						"previous": "Trước"
+					}
+				},
+				"dom": '<"top"l>rt<"bottom"ip><"clear">'
+			});
+
+			// Kết nối ô tìm kiếm tùy chỉnh với DataTable
+			$('#userSearch').on('keyup', function () {
+				$('#user-table').DataTable().search($(this).val()).draw();
+			});
+
+			// Khởi tạo tooltip
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+</body>
+
+</html>
