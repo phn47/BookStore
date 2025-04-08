@@ -58,7 +58,9 @@
               <thead>
                 <tr>
 
-                  <th scope="col">STT</th>
+                 
+
+                   <th scope="col">STT</th>
 
                   <th scope="col">Sản phẩm</th>
                   <th scope="col">Tên</th>
@@ -100,9 +102,10 @@
                     </a>
 
 
+                    
+                 
                     <a class="trash" th:href="@{'/doUnFavorite?id=' + ${item.product.productId}}" 
                     onclick="setTimeout(() => location.reload(), 200);" title="Xóa yêu thích">
-                 
 
                       <i class="icofont-trash"></i>
                     </a>

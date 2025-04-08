@@ -1,6 +1,6 @@
 # Know_Sphere
 
-![Know_Sphere Logo](upload/images/logo.png)
+![Know_Sphere Logo](https://res.cloudinary.com/derzqoidk/image/upload/v1744120751/images/ociasvuev4obli72xs8c.png)
 
 ## Giới thiệu
 
