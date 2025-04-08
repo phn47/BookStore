@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-KnowSphereApplication<Know_Sphere>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "vn.fs.KnowSphereApplication",
+            "projectName": "Know_Sphere",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+    ]
+}
