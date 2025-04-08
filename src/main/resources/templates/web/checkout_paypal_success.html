@@ -67,6 +67,32 @@
               <h5><em>Chúng tôi sẽ sớm giao đơn hàng cho bạn, cảm ơn!</em></h5>
               <!-- <h5><em>Thank you for your purchase, thank you!</em></h5> -->
               <hr>
+
+              <div class="order-details mt-4">
+                <div class="card border-0 shadow-sm">
+                  <div class="card-header bg-light">
+                    <h5 class="mb-0">Thông tin đơn hàng</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><strong>Mã đơn hàng:</strong> <span
+                            th:text="${orderId != null ? orderId : 'Chưa có'}">#123456</span></p>
+                        <p><strong>Ngày đặt hàng:</strong> <span
+                            th:text="${orderDate != null ? #dates.format(orderDate, 'dd/MM/yyyy') + ' ' + #dates.format(orderDate, 'HH:mm') : #dates.format(#dates.createNow(), 'dd/MM/yyyy') + ' ' + #dates.format(#dates.createNow(), 'HH:mm')}">01/01/2023
+                            12:00</span></p>
+                      </div>
+                      <div class="col-md-6">
+                        <p><strong>Phương thức thanh toán:</strong> <span
+                            th:text="${paymentMethod != null ? paymentMethod : 'PayPal'}">PayPal</span></p>
+                        <p><strong>Trạng thái:</strong> <span class="badge bg-success"
+                            th:text="${orderStatus != null ? orderStatus : 'Đã thanh toán'}">Đã thanh toán</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <a th:href="@{/}" style="text-decoration: underline; color: #dc3545"><em>Click tại đây để tiếp tục mua
                   sắm!</em></a>
             </div>

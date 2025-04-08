@@ -57,11 +57,7 @@
             <table class="table-list" th:if="${totalSave!=0}">
               <thead>
                 <tr>
-
-                 
-
-                   <th scope="col">STT</th>
-
+                  <th scope="col">STT</th>
                   <th scope="col">Sản phẩm</th>
                   <th scope="col">Tên</th>
                   <th scope="col">Đơn giá</th>
@@ -100,13 +96,8 @@
                     <a class="view" th:href="@{/productDetail(id=${item.product.productId})}" title="Chi tiết sản phẩm">
                       <i class="fas fa-eye"></i>
                     </a>
-
-
-                    
-                 
                     <a class="trash" th:href="@{'/doUnFavorite?id=' + ${item.product.productId}}" 
                     onclick="setTimeout(() => location.reload(), 200);" title="Xóa yêu thích">
-
                       <i class="icofont-trash"></i>
                     </a>
                   </td>

@@ -161,6 +161,9 @@ public class CartController extends CommomController {
 
 		String checkOut = request.getParameter("checkOut");
 
+		// Lưu phương thức thanh toán vào session
+		session.setAttribute("checkOutMethod", checkOut);
+
 		Collection<CartItem> cartItems = shoppingCartService.getCartItems();
 
 		double totalPrice = 0;
@@ -217,6 +220,9 @@ public class CartController extends CommomController {
 		session.removeAttribute("cartItems");
 		model.addAttribute("orderId", order.getOrderId());
 
+		// Lưu orderId vào session để sử dụng ở trang checkout_success
+		session.setAttribute("lastOrderId", order.getOrderId());
+
 		return "redirect:/checkout_success";
 	}
 
@@ -266,6 +272,10 @@ public class CartController extends CommomController {
 				shoppingCartService.clear();
 				session.removeAttribute("cartItems");
 				model.addAttribute("orderId", orderFinal.getOrderId());
+
+				// Lưu orderId vào session để sử dụng ở trang checkout_success
+				session.setAttribute("lastOrderId", orderFinal.getOrderId());
+
 				orderFinal = new Order();
 				return "redirect:/checkout_paypal_success";
 			}
@@ -277,11 +287,39 @@ public class CartController extends CommomController {
 
 	// done checkout ship cod
 	@GetMapping(value = "/checkout_success")
-	public String checkoutSuccess(Model model, User user) {
+	public String checkoutSuccess(Model model, User user, HttpServletRequest request) {
 		commomDataService.commonData(model, user);
 
-		return "web/checkout_success";
+		// Lấy orderId từ session nếu có
+		Long orderId = (Long) session.getAttribute("lastOrderId");
+		if (orderId != null) {
+			model.addAttribute("orderId", orderId);
 
+			// Lấy thông tin đơn hàng từ database
+			Order order = orderRepository.findById(orderId).orElse(null);
+			if (order != null) {
+				// Thêm thông tin phương thức thanh toán
+				String paymentMethod = "COD";
+				if (order.getStatus() == 1) {
+					paymentMethod = "VNPay";
+				} else if (order.getStatus() == 2) {
+					paymentMethod = "PayPal";
+				}
+				model.addAttribute("paymentMethod", paymentMethod);
+
+				// Thêm thông tin trạng thái
+				String orderStatus = "Chờ xác nhận";
+				if (order.getStatus() == 1 || order.getStatus() == 2) {
+					orderStatus = "Đã thanh toán";
+				}
+				model.addAttribute("orderStatus", orderStatus);
+
+				// Thêm ngày đặt hàng
+				model.addAttribute("orderDate", order.getOrderDate());
+			}
+		}
+
+		return "web/checkout_success";
 	}
 
 	// done checkout paypal
@@ -289,8 +327,26 @@ public class CartController extends CommomController {
 	public String paypalSuccess(Model model, User user) {
 		commomDataService.commonData(model, user);
 
-		return "web/checkout_paypal_success";
+		// Lấy orderId từ session nếu có
+		Long orderId = (Long) session.getAttribute("lastOrderId");
+		if (orderId != null) {
+			model.addAttribute("orderId", orderId);
 
+			// Lấy thông tin đơn hàng từ database
+			Order order = orderRepository.findById(orderId).orElse(null);
+			if (order != null) {
+				// Thêm thông tin phương thức thanh toán
+				model.addAttribute("paymentMethod", "PayPal");
+
+				// Thêm thông tin trạng thái
+				model.addAttribute("orderStatus", "Đã thanh toán");
+
+				// Thêm ngày đặt hàng
+				model.addAttribute("orderDate", order.getOrderDate());
+			}
+		}
+
+		return "web/checkout_paypal_success";
 	}
 
 }
