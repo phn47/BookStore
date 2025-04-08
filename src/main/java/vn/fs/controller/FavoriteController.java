@@ -52,11 +52,38 @@ public class FavoriteController extends CommomController {
 
 	@GetMapping(value = "/doUnFavorite")
 	public String doUnFavorite(Model model, Product product, User user, @RequestParam("id") Long id) {
+		// Lấy Favorite cần xóa dựa trên productId và userId
 		Favorite favorite = favoriteRepository.selectSaves(id, user.getUserId());
-		product = productRepository.findById(id).orElse(null);
-		product.setFavorite(false);
-		favoriteRepository.delete(favorite);
+		if (favorite != null) {
+			// Xóa Favorite khỏi danh sách yêu thích
+			favoriteRepository.delete(favorite);
+
+			// Cập nhật trạng thái favorite của sản phẩm (nếu cần)
+			product = productRepository.findById(id).orElse(null);
+			if (product != null) {
+				product.setFavorite(false); // Cập nhật trạng thái (nếu Product có trường này)
+				productRepository.save(product); // Lưu thay đổi nếu cần
+			}
+
+			// Lấy danh sách Favorite còn lại của người dùng
+			List<Favorite> remainingFavorites = favoriteRepository.findByUserUserId(user.getUserId());
+
+			// Kiểm tra danh sách yêu thích còn sản phẩm không
+			if (remainingFavorites != null && !remainingFavorites.isEmpty()) {
+				// Nếu còn sản phẩm yêu thích, quay lại trang /favorite
+				commomDataService.commonData(model, user);
+				model.addAttribute("favorites", remainingFavorites); // Truyền danh sách yêu thích vào model
+				return "redirect:/favorite"; // Quay lại trang yêu thích
+			} else {
+				// Nếu không còn sản phẩm yêu thích, chuyển hướng về /products
+				commomDataService.commonData(model, user);
+				return "redirect:/products";
+			}
+		}
+
+		// Nếu không tìm thấy Favorite để xóa, chuyển về /products
 		commomDataService.commonData(model, user);
 		return "redirect:/products";
 	}
+
 }

@@ -192,8 +192,7 @@ public class VnpayController {
 
     @GetMapping("/success")
     public String paymentSuccess(@RequestParam(required = false) String orderId, Model model) {
-        model.addAttribute("orderId", orderId); // Pass orderId to the template (can be null)
-        return "payment-success"; // Render the payment-success.html template
+        return "redirect:/checkout_success";
     }
 
     private String buildSignValue(Map<String, String> params, String secretKey) {

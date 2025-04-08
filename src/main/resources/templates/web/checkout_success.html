@@ -60,20 +60,58 @@
               <h4>Đơn Đặt Hàng Của Bạn</h4>
             </div>
             <div class="text-center">
-              <h3 style="color: #dc3545" class="mt-5">ĐẶT HÀNG THÀNH CÔNG!</h3>
-              <br>
-              <h4>Chúc mừng bạn <span style="text-decoration: underline; color: #dc3545">[[${user.name}]]</span> đã đặt
-                hàng thành công!</h4>
-              <h5><em>Chúng tôi sẽ sớm giao đơn hàng cho bạn, cảm ơn!</em></h5>
-              <!-- <h5><em>Thank you for your purchase, thank you!</em></h5> -->
-              <hr>
-              <a th:href="@{/}" style="text-decoration: underline; color: #dc3545"><em>Click tại đây để tiếp tục mua
-                  sắm!</em></a>
+              <div class="success-icon mb-4">
+                <i class="fas fa-check-circle" style="font-size: 80px; color: #28a745;"></i>
+              </div>
+              <h3 style="color: #28a745; font-weight: 700;" class="mt-3">ĐẶT HÀNG THÀNH CÔNG!</h3>
+              <div class="success-message mt-4">
+                <h4>Chúc mừng bạn <span
+                    style="text-decoration: underline; color: #dc3545; font-weight: 600;">[[${user.name}]]</span> đã đặt
+                  hàng thành công!</h4>
+                <p class="lead mt-3">Cảm ơn bạn đã mua hàng tại KnowSphere. Chúng tôi sẽ sớm giao đơn hàng cho bạn.</p>
+              </div>
+
+              <div class="order-details mt-5">
+                <div class="card border-0 shadow-sm">
+                  <div class="card-header bg-light">
+                    <h5 class="mb-0">Thông tin đơn hàng</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><strong>Mã đơn hàng:</strong> <span
+                            th:text="${orderId != null ? orderId : 'Chưa có'}">#123456</span></p>
+                        <p><strong>Ngày đặt hàng:</strong> <span
+                            th:text="${orderDate != null ? #dates.format(orderDate, 'dd/MM/yyyy') + ' ' + #dates.format(orderDate, 'HH:mm') : #dates.format(#dates.createNow(), 'dd/MM/yyyy') + ' ' + #dates.format(#dates.createNow(), 'HH:mm')}">01/01/2023
+                            12:00</span></p>
+                      </div>
+                      <div class="col-md-6">
+                        <p><strong>Phương thức thanh toán:</strong> <span
+                            th:text="${paymentMethod != null ? paymentMethod : 'COD'}">COD</span></p>
+                        <p><strong>Trạng thái:</strong> <span class="badge"
+                            th:classappend="${orderStatus == 'Đã thanh toán' ? 'bg-success' : 'bg-warning'}"
+                            th:text="${orderStatus != null ? orderStatus : 'Chờ xác nhận'}">Chờ xác nhận</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="next-steps mt-4">
+                <p class="text-muted">Chúng tôi sẽ gửi email xác nhận đơn hàng đến địa chỉ email của bạn.</p>
+              </div>
+
+              <div class="action-buttons mt-5">
+                <a th:href="@{/}" class="btn btn-primary btn-lg me-3">
+                  <i class="fas fa-shopping-cart me-2"></i>Tiếp tục mua sắm
+                </a>
+                <a th:href="@{/profile}" class="btn btn-outline-secondary btn-lg">
+                  <i class="fas fa-list me-2"></i>Xem đơn hàng của tôi
+                </a>
+              </div>
             </div>
           </div>
         </div>
-
-
       </div>
     </div>
   </section>
