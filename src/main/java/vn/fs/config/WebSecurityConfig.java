@@ -21,25 +21,26 @@ import vn.fs.service.UserDetailService;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private final UserDetailService userDetailService;
+	private final BCryptPasswordEncoder passwordEncoder;
+
 	@Autowired
-	private UserDetailService userDetailService;
+	public WebSecurityConfig(UserDetailService userDetailService) {
+		this.userDetailService = userDetailService;
+		this.passwordEncoder = new BCryptPasswordEncoder();
+	}
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return this.passwordEncoder;
 	}
 
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
 		auth.setUserDetailsService(userDetailService);
-		auth.setPasswordEncoder(passwordEncoder());
+		auth.setPasswordEncoder(passwordEncoder);
 		return auth;
-	}
-
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
 	}
 
 	@Override
@@ -49,16 +50,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-
 		http.csrf().disable();
 
 		// Admin page
-		http.authorizeRequests().antMatchers("/admin/**", "/admin/editProduct/**").access("hasRole('ROLE_ADMIN')");
-
-		// If you are not logged in, you will be redirected to the /login page.
-		http.authorizeRequests().antMatchers("/checkout").access("hasRole('ROLE_USER')");
-
 		http.authorizeRequests()
+				.antMatchers("/admin/**", "/admin/editProduct/**").hasRole("ADMIN")
+				.antMatchers("/checkout").hasRole("USER")
 				.antMatchers("/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
@@ -66,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginProcessingUrl("/doLogin")
 				.loginPage("/login")
 				.defaultSuccessUrl("/?login_success")
-				.successHandler(new SuccessHandler()).failureUrl("/login?error=true")
+				.successHandler(new SuccessHandler())
 				.failureUrl("/login?error=true")
 				.permitAll()
 				.and()
@@ -75,12 +72,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.clearAuthentication(true)
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/?logout_success")
-				.permitAll();
-
-		// remember-me
-		http.rememberMe()
+				.permitAll()
+				.and()
+				.rememberMe()
 				.rememberMeParameter("remember");
-
 	}
 
 }
