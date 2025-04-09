@@ -3,13 +3,19 @@ services:
     name: bookstore
     env: docker
     buildCommand: mvn clean package -DskipTests
-    startCommand: java -jar target/Know_Sphere-1.0.jar
+    startCommand: java -Dserver.port=$PORT -jar target/Know_Sphere-1.0.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
       - key: PORT
         value: "9090"
       - key: JAVA_OPTS
-        value: "-XX:+UseContainerSupport -Xmx512m -Xms256m"
+        value: "-XX:+UseContainerSupport -Xmx512m -Xms256m -Dspring.profiles.active=prod"
+      - key: MYSQL_URL
+        value: "jdbc:mysql://monorail.proxy.rlwy.net:19221/railway?allowPublicKeyRetrieval=true&useSSL=false"
+      - key: MYSQL_USER
+        value: "root"
+      - key: MYSQL_PASSWORD
+        value: "WmmwIKFqJrETSwTRarPkDmxLmOImIrsh"
     healthCheckPath: /
     autoDeploy: true 
