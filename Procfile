@@ -1,1 +1,1 @@
-web: java -jar target/BookStore-1.0.jar --spring.profiles.active=prod 
+web: java -jar target/Know_Sphere-1.0.jar --spring.profiles.active=prod 
