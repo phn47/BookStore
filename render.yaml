@@ -2,10 +2,14 @@ services:
   - type: web
     name: bookstore
     env: docker
-    buildCommand: mvn clean package
+    buildCommand: mvn clean package -DskipTests
     startCommand: java -jar target/Know_Sphere-1.0.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
+      - key: PORT
+        value: "9090"
+      - key: JAVA_OPTS
+        value: "-XX:+UseContainerSupport -Xmx512m -Xms256m"
     healthCheckPath: /
     autoDeploy: true 
