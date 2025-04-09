@@ -6,4 +6,6 @@ services:
     startCommand: java -jar target/Know_Sphere-1.0.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: prod 
+        value: prod
+    healthCheckPath: /
+    autoDeploy: true 
