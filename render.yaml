@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: bookstore
+    env: docker
+    buildCommand: mvn clean package
+    startCommand: java -jar target/Know_Sphere-1.0.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod 
